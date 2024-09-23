@@ -1,0 +1,21 @@
+# Activation du module de réécriture d'URL :
+RewriteEngine on
+
+#--------------------------------------------------
+# ROUTES
+#--------------------------------------------------
+
+# ROUTE : categories.index
+# PATTERN: /categories
+# URL: ?categories=index
+RewriteRule ^categories$ index.php?categories=index [L]
+
+# ROUTE : categories.destroy
+# PATTERN: /categories/destroy/{id}
+# URL: ?categories=destroy&id=x
+RewriteRule ^categories/destroy/([1-9][0-9]*)$ index.php?categories=destroy&id=$1 [L]
+
+
+# --------------------------------------------------
+RewriteCond %{REQUEST_URI} !\.(js|css|jpg|gif|zip|png|pdf)$ [NC]
+RewriteRule ^(.*)$ index.php [L]

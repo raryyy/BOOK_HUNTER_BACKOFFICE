@@ -1,0 +1,177 @@
+BOOK HUNTER 2024
+
+------------------------------------------------------------
+I. LE VERSIONNING > Mettre en place un nouveau dépôt GITHUB
+------------------------------------------------------------
+
+------------------------------------------------------------
+II. LA DATABASE
+------------------------------------------------------------
+	1. Intégrer la db_remplie sur votre serveur MySQL
+
+----------------------------------------------------
+III. LA STRUCTURE MCV > Commit: Structure MVC de base 
+	1-Pas Fait | 2-Pas OK | 3-Fonctionnel | 4-OK
+----------------------------------------------------
+	Création de la structure complète de l'app MVC
+	app, core, public, ...
+	Copier/coller OK pour la connexion
+		- app
+			- config
+				- params.php
+			- controllers
+			- models
+			- routers
+				- index.php
+			- views
+				- templates
+					- index.php
+		- core 
+			- init.php
+			- connexion.php
+			- helpers
+
+		- public
+			- index.php
+			- css
+			- js
+			- .htaccess
+
+-------------------------------------------------------------------------------
+IV. LE TEMPLATE > Commit: Intégration et décomposition du template en partials
+	1-Pas Fait | 2-Pas OK | 3-Fonctionnel | 4-OK
+-------------------------------------------------------------------------------
+	1. Intégrer le template
+	2. Placer les zones dynamiques (title et content)
+	3. Décomposer en partials
+
+-------------------------------------------------------------------------------
+V. LA ROUTE PAR DÉFAUT > Commit: Route par défaut: pages.home
+	1-Pas Fait | 2-Pas OK | 3-Fonctionnel | 4-OK
+-------------------------------------------------------------------------------
+	PATTERN: /
+	CTRL: pagesController
+	ACTION: home
+	VIEW: pages/home.php
+
+		pagesController.php
+			> homeAction
+				- $books -> booksModel -> findAllPopulars (GROUP BY)
+				- $authors -> authorsModel -> findAllPopulars (GROUP BY)
+			> pages/home.php
+				> books/_index.php
+				> authors/_index.php 
+
+	ATTENTION: 
+		Pour les tags: 
+		Dans le foreach de books/_index.php
+		Faire appel à la fonction findAllByBookId(xxx) du tagsModel -> $tags
+		et inclure la vue tags/_index.php et y faire un foreach sur $tags
+
+-------------------------------------------------------------------------------
+VI. ROUTE DE LA LISTE DES BOOKS > Commit: Route books.index
+-------------------------------------------------------------------------------
+	PATTERN: /?books=index
+	CTRL: booksController
+	ACTION: index
+	VIEW: books/index.php
+		> Fait appel à books/_index.php
+		> Créer un router 'books' avec un switch !
+		> Ceci est le default
+
+
+		./app/routers/index.php
+			if (isset($_GET['books'])) :
+				include_once '../app/routers/books.php'
+			else:
+				// route par défaut...
+			endif;
+
+		./app/routers/books.php
+			use \App\Controller\BookController;
+			include_once '../app/controllers/booksController.php';
+
+			switch ($_GET['books']):
+				case: 'index':
+					BookController\indexAction($connexion);
+			endswitch;
+
+-------------------------------------------------------------------------------
+VII. ROUTE DE LA LISTE DES AUTHORS > Commit: Route authors.index
+-------------------------------------------------------------------------------
+	PATTERN: /?authors=index
+	CTRL: authorsController
+	ACTION: index
+	VIEW: authors/index.php
+		> Fait appel à authors/_index.php
+		> Créer un router 'authors' avec un switch !
+		> Ceci est le default
+
+-------------------------------------------------------------------------------
+VIII. ROUTE DU DÉTAIL D'UN BOOK > Commit: Route books.show
+-------------------------------------------------------------------------------
+	PATTERN: /?books=show&id=x
+	CTRL: booksController
+	ACTION: show
+	VIEW: books/show.php
+		> Nouveau case dans le switch du router 'books'
+
+-------------------------------------------------------------------------------
+IX. ROUTE DU DÉTAIL D'UN AUTHOR > Commit: Route authors.show
+-------------------------------------------------------------------------------
+	PATTERN: /?authors=show&id=x
+	CTRL: authorsController
+	ACTION: show
+	VIEW: authors/show.php
+		> Nouveau case dans le switch du router 'authors'
+
+		Faire appel à la fonction findAllByAuthorId()
+		et à la vue: books._indexByAuthorId (ou directement faire un foreach sur le résultat de la fonction)
+
+
+-------------------------------------------------------------------------------
+X. TEMPLATE - CATÉGORIES > Commit: Ajout des catégories dans le aside
+-------------------------------------------------------------------------------
+	Faire appel à categories/_index.php
+
+
+-------------------------------------------------------------------------------
+XI. ROUTE DU DÉTAIL D'UNE CATÉGORIE > Commit: Route categories.show
+-------------------------------------------------------------------------------
+	PATTERN: /?categories=show&id=x
+	CTRL: categoriesController
+	ACTION: show
+	VIEW: categories/show.php
+		> Nouveau case dans le switch du router 'categories'
+
+-------------------------------------------------------------------------------
+XII. TEMPLATE - TAGS > Commit: Ajout des tags dans le aside
+-------------------------------------------------------------------------------
+	Faire appel à tags/_index.php
+
+
+-------------------------------------------------------------------------------
+XIII. ROUTE DU DÉTAIL D'UN TAG > Commit: Route tags.show
+-------------------------------------------------------------------------------
+	PATTERN: /?tags=show&id=x
+	CTRL: tagsController
+	ACTION: show
+	VIEW: tags/show.php
+		> Nouveau case dans le switch du router 'tags'
+
+-------------------------------------------------------------------------------
+XIV. ROUTE AJOUT À MA COLLECTION > Commit: Route collections.create
+-------------------------------------------------------------------------------
+	PATTERN: /?collections=create
+	CTRL: collectionsController
+	ACTION: create
+	REDIRECT: books/show.php avec un message dans la session	
+		> Le livre a bien été ajouté à votre collection
+
+
+
+
+
+
+
+

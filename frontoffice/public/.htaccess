@@ -1,0 +1,28 @@
+# Activation du module de réécriture d'URL :
+RewriteEngine on
+
+#--------------------------------------------------
+# ROUTES
+#--------------------------------------------------
+
+# BOOKS.SHOW
+# PATTERN: /books/{id}/{slug}
+# URL: index.php?books=show&id=xxx
+RewriteRule ^books/([1-9][0-9]*)/[a-z0-9\-]+$ index.php?books=show&id=$1 [L]
+
+# -------------------
+# ROUTES DES USERS
+# -------------------
+# USERS.LOGIN
+# PATTERN: /users/login
+# URL: index.php?users=login
+RewriteRule ^users/login$ index.php?users=login [L]
+
+# USERS.VERIFICATION
+# PATTERN: /users/verification
+# URL: index.php?users=verification
+RewriteRule ^users/verification$ index.php?users=verification [L]
+
+# --------------------------------------------------
+RewriteCond %{REQUEST_URI} !\.(js|css|jpg|gif|zip|png|pdf)$ [NC]
+RewriteRule ^(.*)$ index.php [L]

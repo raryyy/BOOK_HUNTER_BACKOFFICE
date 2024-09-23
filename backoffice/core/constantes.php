@@ -1,0 +1,6 @@
+<?php
+
+// BASE_PUBLIC_URL
+define('BASE_ADMIN_URL', 'http://' . $_SERVER['HTTP_HOST'] . explode(DISPATCHER_NAME, $_SERVER['SCRIPT_NAME'])[0]);
+
+define('BASE_PUBLIC_URL', str_replace(ADMIN_FOLDER, PUBLIC_FOLDER, BASE_ADMIN_URL));
